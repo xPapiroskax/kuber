@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: http-server
+  namespace: home-dev
+spec:
+  containers:
+    - name: server
+      image: kixualx/http-server:0.0.1
+      ports:
+        - name: web
+          containerPort: 8080
