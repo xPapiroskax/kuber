@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-http-server
+  namespace: home-dev
+spec:
+  strategy:
+    type: Recreate
+  #strategy:
+  #  rollingUpdate:
+  #    maxSurge: 25% # создает новые поды
+  #    maxUnavailable: 25% #удаляет старые поды
+  replicas: 3
+  selector:
+    matchLabels:
+      app: go-http-server
+  template: ## Pod
+    metadata:
+      labels:
+        app: go-http-server
+    spec:
+      containers:
+      - name: server
+        image: kixualx/http-server:0.0.2
+        ports:
+        - containerPort: 8080
+          name: web
