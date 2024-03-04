@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-env-reader
+  namespace: read-env
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-env-reader
+  template:
+    metadata:
+      labels:
+        app: go-env-reader
+    spec:
+      containers:
+      - name: reader
+        image: kixualx/env-reader:0.0.1
+# Экспорт нескольких переменных
+        env:
+          - name: DB_NAME
+            value: postgres
+          - name: DB_URL
+            value: "127.0.0.1"
+          - name: DB_PORT
+            value: "5432"
+# Достаем все переменные из kubernetes secret:
+        envFrom:
+          - secretRef:
+              name: some-secret
+# Экспорт одной переменной
+#        env:
+#          - name: DB_NAME
+#            valueFrom:
+#              secretKeyRef:
+#                name: some-secret
+#                key: DB_NAME
